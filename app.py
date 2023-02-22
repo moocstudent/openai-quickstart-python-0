@@ -21,6 +21,23 @@ def index():
     result = request.args.get("result")
     return render_template("index.html", result=result)
 
+@app.route("/level1", methods=("GET", "POST"))
+def level1():
+    if request.method == "POST":
+        animal = request.form["code"]
+        response = openai.Completion.create(
+            model="text-davinci-003",
+            prompt="",
+            temperature=0.7,
+            max_tokens=256,
+            top_p=1,
+            frequency_penalty=0,
+            presence_penalty=0
+        )
+        return redirect(url_for("level1", result=response.choices[0].text))
+
+    result = request.args.get("result")
+    return render_template("level1.html", result=result)
 
 def generate_prompt(animal):
     return """Suggest three names for an animal that is a superhero.
