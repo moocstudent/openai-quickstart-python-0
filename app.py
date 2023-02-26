@@ -21,6 +21,27 @@ def index():
     result = request.args.get("result")
     return render_template("index.html", result=result)
 
+#输入注释语句生成代码
+#输入框需要模仿playground
+@app.route("/code", methods=("GET", "POST"))
+def code():
+    if request.method == "POST":
+        code = request.form["code"]
+        response = openai.Completion.create(
+            model="code-davinci-002",
+            prompt="",
+            temperature=0,
+            max_tokens=256,
+            top_p=1,
+            frequency_penalty=0,
+            presence_penalty=0
+        )
+        return redirect(url_for("code", result=response.choices[0].text))
+
+    result = request.args.get("result")
+    return render_template("code.html", result=result)
+
+# unused
 @app.route("/level1", methods=("GET", "POST"))
 def level1():
     if request.method == "POST":
